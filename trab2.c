@@ -74,28 +74,6 @@ int solve(int ** toxi, int ** peso, int n, int c){
         }
     }
 
-/*for (int i = 0; i <= n; i++){
-    for (int j = 0; j <= n; j++){
-        for (int k = 0; k <= c; k++){
-            if (i == 0 && j == 0){
-                sol[i][j][k] = 0;
-            }
-            else if (i == 0){
-                sol[i][j][k] = sol[i][j-1][k];
-            }
-            else if (j == 0){
-                sol[i][j][k] = sol[i-1][j][k];
-            }
-            else if (peso[i-1][j-1] <= k){
-                sol[i][j][k] = max(sol[i-1][j][k], sol[i][j-1][k-peso[i-1][j-1]] + peso[i-1][j-1]);
-            }
-            else{
-                sol[i][j][k] = sol[i-1][j][k];
-            }
-        }
-    }
-*/
-
     return sol[n][n][c];
 }
 
