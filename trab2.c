@@ -87,6 +87,7 @@ void caminhar_solucao(int ***sol, int i, int j,  int c, int **peso, int **toxi){
             printf("B");
         }
     } else if (i == 1 && j > 1){
+        //borda de cima
         if (sol[i][j][c] == sol[i][j-1][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
             caminhar_solucao(sol, i, j-1, c-peso[i-1][j-1], peso, toxi);
             printf("DC");
@@ -95,6 +96,7 @@ void caminhar_solucao(int ***sol, int i, int j,  int c, int **peso, int **toxi){
             printf("D");
         }
     } else if (i > 1 && j == 1){
+        //borda esquerda
         if (sol[i][j][c] == sol[i-1][j][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
             caminhar_solucao(sol, i-1, j, c-peso[i-1][j-1], peso, toxi);
             printf("BC");
