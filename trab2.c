@@ -10,7 +10,7 @@ int max(int v1, int v2){
 }
 
 
-int solve(int ** toxi, int ** peso, int n, int c){
+void solve(int ** toxi, int ** peso, int n, int c, int ***sol){
     // funcao que resolve o problema:
     /*
     - para cada elemento (i,j,c) temos a solucao otima para ir de (0,0) ate (i,j) em uma mochila de capacidade c
@@ -21,15 +21,6 @@ int solve(int ** toxi, int ** peso, int n, int c){
         4) considerando que veio da esquerda e nao coletando o atual
     - eh importante notar que caso esteja na borda esquerda ou superior, a solucao para o de cima ou da esquerda eh 0
     */    
-
-    // alocar matriz 3D para armazenar as solucoes:
-    int *** sol = (int ***)malloc(n*sizeof(int **));
-    for(int i = 0; i <= n; i++){
-        sol[i] = (int **)malloc(n*sizeof(int *));
-        for(int j = 0; j <= n; j++){
-            sol[i][j] = (int *)malloc((c+1)*sizeof(int));
-        }
-    }
 
     //para cada um dos elementos da primeira linha, inicializar todos os k valores com 0
     for (int j = 0; j <= n; j++){
@@ -73,32 +64,51 @@ int solve(int ** toxi, int ** peso, int n, int c){
             }
         }
     }
-
-/*for (int i = 0; i <= n; i++){
-    for (int j = 0; j <= n; j++){
-        for (int k = 0; k <= c; k++){
-            if (i == 0 && j == 0){
-                sol[i][j][k] = 0;
-            }
-            else if (i == 0){
-                sol[i][j][k] = sol[i][j-1][k];
-            }
-            else if (j == 0){
-                sol[i][j][k] = sol[i-1][j][k];
-            }
-            else if (peso[i-1][j-1] <= k){
-                sol[i][j][k] = max(sol[i-1][j][k], sol[i][j-1][k-peso[i-1][j-1]] + peso[i-1][j-1]);
-            }
-            else{
-                sol[i][j][k] = sol[i-1][j][k];
-            }
-        }
-    }
-*/
-
-    return sol[n][n][c];
 }
 
+void caminhar_solucao(int ***sol, int i, int j,  int c, int **peso, int **toxi){
+
+    if (i > 1 && j > 1){ // se nao for o primeiro elemento
+        //se coleto o atual e veio de cima: sol[i-1][j][c-peso[i-1][j-1]]
+        //se nao coleto o atual e veio de cima: sol[i-1][j][c]
+        //se coleto o atual e veio da esquerda: sol[i][j-1][c-peso[i-1][j-1]]
+        //se nao coleto o atual e veio da esquerda: sol[i][j-1][c]
+        if (sol[i][j][c] == sol[i][j-1][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
+            caminhar_solucao(sol, i, j-1, c-peso[i-1][j-1], peso, toxi);
+            printf("DC");
+        } else if (sol[i][j][c] == sol[i][j-1][c]){
+            caminhar_solucao(sol, i, j-1, c, peso, toxi);
+            printf("D");
+        } else if (sol[i][j][c] == sol[i-1][j][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
+            caminhar_solucao(sol, i-1, j, c-peso[i-1][j-1], peso, toxi);
+            printf("BC");
+        } else if (sol[i][j][c] == sol[i-1][j][c]){
+            caminhar_solucao(sol, i-1, j, c, peso, toxi);
+            printf("B");
+        }
+    } else if (i == 1 && j > 1){
+        if (sol[i][j][c] == sol[i][j-1][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
+            caminhar_solucao(sol, i, j-1, c-peso[i-1][j-1], peso, toxi);
+            printf("DC");
+        } else if (sol[i][j][c] == sol[i][j-1][c]){
+            caminhar_solucao(sol, i, j-1, c, peso, toxi);
+            printf("D");
+        }
+    } else if (i > 1 && j == 1){
+        if (sol[i][j][c] == sol[i-1][j][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
+            caminhar_solucao(sol, i-1, j, c-peso[i-1][j-1], peso, toxi);
+            printf("BC");
+        } else if (sol[i][j][c] == sol[i-1][j][c]){
+            caminhar_solucao(sol, i-1, j, c, peso, toxi);
+            printf("B");
+        }
+    } else if (i == 1 && j == 1){
+        if (sol[i][j][c] == toxi[i-1][j-1]){
+            printf("C");
+        }
+    }
+
+}
 
 int main() {
     
@@ -122,8 +132,21 @@ int main() {
             scanf("%d", &peso[i][j]);
 
 
-    int resultado = solve(toxi, peso, n, c);
-    printf("%d\n", resultado);
+    // alocar matriz 3D para armazenar as solucoes:
+    int *** sol = (int ***)malloc(n*sizeof(int **));
+    for(int i = 0; i <= n; i++){
+        sol[i] = (int **)malloc(n*sizeof(int *));
+        for(int j = 0; j <= n; j++){
+            sol[i][j] = (int *)malloc((c+1)*sizeof(int));
+        }
+    }
+
+    solve(toxi, peso, n, c, sol);
+
+    printf("%d\n", sol[n][n][c]);
+    
+    caminhar_solucao(sol, n, n, c, peso, toxi);
+    printf("\n");
 
     return 0;
 }
