@@ -19,7 +19,7 @@ void solve(int ** toxi, int ** peso, int n, int c, int ***sol){
         2) considerando que veio de cima e nao coletando o atual
         3) considerando que veio da esquerda e coletando o atual (isso somente se o peso do atual for menor que c)
         4) considerando que veio da esquerda e nao coletando o atual
-    - eh importante notar que caso esteja na borda esquerda ou superior, a solucao para o de cima ou da esquerda eh 0
+    - eh importante notar que caso esteja na borda esquerda ou superior, a solucao para o da esquerda ou de cima eh 0, respectivamente.
     */    
 
     //para cada um dos elementos da primeira linha, inicializar todos os k valores com 0
