@@ -73,13 +73,13 @@ void caminhar_solucao(int ***sol, int i, int j,  int c, int **peso, int **toxi){
         //se nao coleto o atual e veio de cima: sol[i-1][j][c]
         //se coleto o atual e veio da esquerda: sol[i][j-1][c-peso[i-1][j-1]]
         //se nao coleto o atual e veio da esquerda: sol[i][j-1][c]
-        if (sol[i][j][c] == sol[i][j-1][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
+        if (peso[i-1][j-1] <= c && sol[i][j][c] == sol[i][j-1][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
             caminhar_solucao(sol, i, j-1, c-peso[i-1][j-1], peso, toxi);
             printf("DC");
         } else if (sol[i][j][c] == sol[i][j-1][c]){
             caminhar_solucao(sol, i, j-1, c, peso, toxi);
             printf("D");
-        } else if (sol[i][j][c] == sol[i-1][j][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
+        } else if (peso[i-1][j-1] <= c && sol[i][j][c] == sol[i-1][j][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
             caminhar_solucao(sol, i-1, j, c-peso[i-1][j-1], peso, toxi);
             printf("BC");
         } else if (sol[i][j][c] == sol[i-1][j][c]){
@@ -88,7 +88,7 @@ void caminhar_solucao(int ***sol, int i, int j,  int c, int **peso, int **toxi){
         }
     } else if (i == 1 && j > 1){
         //borda de cima
-        if (sol[i][j][c] == sol[i][j-1][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
+        if (peso[i-1][j-1] <= c && sol[i][j][c] == sol[i][j-1][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
             caminhar_solucao(sol, i, j-1, c-peso[i-1][j-1], peso, toxi);
             printf("DC");
         } else if (sol[i][j][c] == sol[i][j-1][c]){
@@ -97,7 +97,7 @@ void caminhar_solucao(int ***sol, int i, int j,  int c, int **peso, int **toxi){
         }
     } else if (i > 1 && j == 1){
         //borda esquerda
-        if (sol[i][j][c] == sol[i-1][j][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
+        if (peso[i-1][j-1] <= c && sol[i][j][c] == sol[i-1][j][c-peso[i-1][j-1]] + toxi[i-1][j-1]){
             caminhar_solucao(sol, i-1, j, c-peso[i-1][j-1], peso, toxi);
             printf("BC");
         } else if (sol[i][j][c] == sol[i-1][j][c]){
