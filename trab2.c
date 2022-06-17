@@ -135,9 +135,9 @@ int main() {
 
 
     // alocar matriz 3D para armazenar as solucoes:
-    int *** sol = (int ***)malloc(n*sizeof(int **));
+    int *** sol = (int ***)malloc((n+1)*sizeof(int **));
     for(int i = 0; i <= n; i++){
-        sol[i] = (int **)malloc(n*sizeof(int *));
+        sol[i] = (int **)malloc((n+1)*sizeof(int *));
         for(int j = 0; j <= n; j++){
             sol[i][j] = (int *)malloc((c+1)*sizeof(int));
         }
